@@ -28,6 +28,7 @@ var HistoryManager = {
 
     this.history.push({
       url: url,
+      path: url.replace(window.location.origin, '').replace(/#.*|\?.*/, ''),
       namespace: namespace
     });
   },
@@ -55,7 +56,40 @@ var HistoryManager = {
       return null;
 
     return history[history.length - 2];
-  }
+  },
+
+  /**
+   * 遷移先のページのパスを返す
+   * ※ newContainerLoading完了前はundefined
+   * @return {String} パス
+   */
+  getCurrentPath: function () {
+    return this.currentStatus().path;
+  },
+
+  /**
+   * 遷移元のページのパスを返す
+   * @return {String} パス
+   */
+  getPrevPath: function () {
+    return this.prevStatus().path;
+  },
+
+  /**
+   * ページバック判定の拡張
+   * @return {Boolean}
+   */
+  Barba.HistoryManager.isBack = function () {
+    let len = this.history.length;
+
+    if ( len > 2 ) {
+      let beforePrevPath = this.history.slice(len - 3)[0].path;
+      let currentPath = this.currentStatus().path;
+      return beforePrevPath === currentPath;
+    } else {
+      return false;
+    }
+  };
 };
 
 module.exports = HistoryManager;
