@@ -985,6 +985,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    if (protocol === 'https:')
 	      return 443;
+	  },
+	
+	  /**
+	   * falsyな要素を配列から削除する
+	   *
+	   * @memberOf Barba.Utils
+	   * @param  {Array} array
+	   * @return {Array}
+	   */
+	  compact: function (array) {
+	    var resIndex = 0
+	    var result = []
+	
+	    if (array == null) {
+	      return result
+	    }
+	
+	    array.forEach(function (value) {
+	      if (value) {
+	        result[resIndex++] = value
+	      }
+	    });
+	
+	    return result
 	  }
 	};
 	
@@ -1239,8 +1263,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+	var Utils = __webpack_require__(6);
+	
 	/**
 	 * HistoryManager helps to keep track of the navigation
 	 *
@@ -1251,11 +1277,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Keep track of the status in historic order
 	   *
-	   * @memberOf Barba.HistoryManager
 	   * @readOnly
 	   * @type {Array}
 	   */
 	  history: [],
+	
+	  /**
+	   * 遷移タイプを判別する為のルート階層の指定
+	   *
+	   * @memberOf Barba.HistoryManager
+	   * @type {Number}
+	   */
+	  rootHierarchy: 0,
 	
 	  /**
 	   * Add a new set of url and namespace
@@ -1304,6 +1337,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * 遷移先のページのパスを返す
 	   * ※ newContainerLoading完了前はundefined
+	   *
+	   * @memberOf Barba.HistoryManager
 	   * @return {String} パス
 	   */
 	  getCurrentPath: function () {
@@ -1312,6 +1347,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  /**
 	   * 遷移元のページのパスを返す
+	   *
+	   * @memberOf Barba.HistoryManager
 	   * @return {String} パス
 	   */
 	  getPrevPath: function () {
@@ -1320,6 +1357,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  /**
 	   * ページバック判定の拡張
+	   *
+	   * @memberOf Barba.HistoryManager
 	   * @return {Boolean}
 	   */
 	  isBack: function () {
@@ -1332,6 +1371,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      return false;
 	    }
+	  },
+	
+	  /**
+	   * 遷移のタイプを返す
+	   *
+	   * @memberOf Barba.HistoryManager
+	   * @return {String} 遷移のタイプ（方向）
+	   */
+	  getDirection: function () {
+	    var len = this.history.length;
+	
+	    if ( len > 0 ) {
+	      var prevPathArr = Utils.compact(this.history.slice(len - 2)[0].path.split('/'));
+	      var currentPathArr = Utils.compact(this.currentStatus().path.split('/'));
+	      return this.distinguishDirection(prevPathArr, currentPathArr);
+	    }
+	
+	    return false;
+	  },
+	
+	  /**
+	   * パス情報を元に遷移のタイプを判別する
+	   *
+	   * @memberOf Barba.HistoryManager
+	   * @param  {Array} prev    前のページのパス
+	   * @param  {Array} current 現在のページのパス
+	   * @return {String}        遷移のタイプ（方向）
+	   */
+	  distinguishDirection: function (prev, current) {
+	    var direction, diff;
+	
+	    prev = prev.slice(this.rootHierarchy);
+	    current = current.slice(this.rootHierarchy);
+	
+	    if ( prev[0] !== current[0] ) {
+	      direction = 'change';
+	      return direction;
+	    }
+	
+	    if ( prev.length !== current.length ) {
+	      diff = current.length - prev.length;
+	
+	      if ( diff < 0 ) {
+	        direction = 'back';
+	      } else {
+	        direction = ( prev[prev.length - 1] === current[prev.length - 1] ) ? 'forword' : 'change:category';
+	      }
+	    } else {
+	      direction = ( prev[prev.length - 2] === current[prev.length - 2] ) ? 'change:page' : 'change:category';
+	    }
+	
+	    return direction;
 	  }
 	};
 	
