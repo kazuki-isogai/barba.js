@@ -79,17 +79,17 @@ var HistoryManager = {
    * ページバック判定の拡張
    * @return {Boolean}
    */
-  Barba.HistoryManager.isBack = function () {
-    let len = this.history.length;
+  isBack: function () {
+    var len = this.history.length;
 
     if ( len > 2 ) {
-      let beforePrevPath = this.history.slice(len - 3)[0].path;
-      let currentPath = this.currentStatus().path;
+      var beforePrevPath = this.history.slice(len - 3)[0].path;
+      var currentPath = this.currentStatus().path;
       return beforePrevPath === currentPath;
     } else {
       return false;
     }
-  };
+  }
 };
 
 module.exports = HistoryManager;
