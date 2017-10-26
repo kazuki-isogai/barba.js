@@ -61,6 +61,8 @@ var HistoryManager = {
   /**
    * 遷移先のページのパスを返す
    * ※ newContainerLoading完了前はundefined
+   *
+	 * @memberOf Barba.HistoryManager
    * @return {String} パス
    */
   getCurrentPath: function () {
@@ -69,6 +71,8 @@ var HistoryManager = {
 
   /**
    * 遷移元のページのパスを返す
+   *
+	 * @memberOf Barba.HistoryManager
    * @return {String} パス
    */
   getPrevPath: function () {
@@ -77,6 +81,8 @@ var HistoryManager = {
 
   /**
    * ページバック判定の拡張
+   *
+	 * @memberOf Barba.HistoryManager
    * @return {Boolean}
    */
   isBack: function () {
