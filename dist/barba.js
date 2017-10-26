@@ -1416,7 +1416,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if ( diff < 0 ) {
 	        direction = 'back';
 	      } else {
-	        direction = ( prev[prev.length - 1] === current[prev.length - 1] ) ? 'forword' : 'change:category';
+	        direction = ( prev[prev.length - 1] === current[prev.length - 1] ) ? 'forward' : 'change:category';
 	      }
 	    } else {
 	      direction = ( prev[prev.length - 2] === current[prev.length - 2] ) ? 'change:page' : 'change:category';
