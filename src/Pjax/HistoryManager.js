@@ -1,3 +1,5 @@
+var Utils = require('../Utils/Utils');
+
 /**
  * HistoryManager helps to keep track of the navigation
  *
@@ -8,11 +10,18 @@ var HistoryManager = {
   /**
    * Keep track of the status in historic order
    *
-   * @memberOf Barba.HistoryManager
    * @readOnly
    * @type {Array}
    */
   history: [],
+
+  /**
+   * 遷移タイプを判別する為のルート階層の指定
+   *
+   * @memberOf Barba.HistoryManager
+   * @type {Number}
+   */
+  rootHierarchy: 0,
 
   /**
    * Add a new set of url and namespace
@@ -62,7 +71,7 @@ var HistoryManager = {
    * 遷移先のページのパスを返す
    * ※ newContainerLoading完了前はundefined
    *
-	 * @memberOf Barba.HistoryManager
+   * @memberOf Barba.HistoryManager
    * @return {String} パス
    */
   getCurrentPath: function () {
@@ -72,7 +81,7 @@ var HistoryManager = {
   /**
    * 遷移元のページのパスを返す
    *
-	 * @memberOf Barba.HistoryManager
+   * @memberOf Barba.HistoryManager
    * @return {String} パス
    */
   getPrevPath: function () {
@@ -82,7 +91,7 @@ var HistoryManager = {
   /**
    * ページバック判定の拡張
    *
-	 * @memberOf Barba.HistoryManager
+   * @memberOf Barba.HistoryManager
    * @return {Boolean}
    */
   isBack: function () {
@@ -95,6 +104,58 @@ var HistoryManager = {
     } else {
       return false;
     }
+  },
+
+  /**
+   * 遷移のタイプを返す
+   *
+   * @memberOf Barba.HistoryManager
+   * @return {String} 遷移のタイプ（方向）
+   */
+  getDirection: function () {
+    var len = this.history.length;
+
+    if ( len > 0 ) {
+      var prevPathArr = Utils.compact(this.history.slice(len - 2)[0].path.split('/'));
+      var currentPathArr = Utils.compact(this.currentStatus().path.split('/'));
+      return this.distinguishDirection(prevPathArr, currentPathArr);
+    }
+
+    return false;
+  },
+
+  /**
+   * パス情報を元に遷移のタイプを判別する
+   *
+   * @memberOf Barba.HistoryManager
+   * @param  {Array} prev    前のページのパス
+   * @param  {Array} current 現在のページのパス
+   * @return {String}        遷移のタイプ（方向）
+   */
+  distinguishDirection: function (prev, current) {
+    var direction, diff;
+
+    prev = prev.slice(this.rootHierarchy);
+    current = current.slice(this.rootHierarchy);
+
+    if ( prev[0] !== current[0] ) {
+      direction = 'change';
+      return direction;
+    }
+
+    if ( prev.length !== current.length ) {
+      diff = current.length - prev.length;
+
+      if ( diff < 0 ) {
+        direction = 'back';
+      } else {
+        direction = ( prev[prev.length - 1] === current[prev.length - 1] ) ? 'forword' : 'change:category';
+      }
+    } else {
+      direction = ( prev[prev.length - 2] === current[prev.length - 2] ) ? 'change:page' : 'change:category';
+    }
+
+    return direction;
   }
 };
 

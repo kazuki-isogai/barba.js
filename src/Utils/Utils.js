@@ -131,6 +131,30 @@ var Utils = {
 
     if (protocol === 'https:')
       return 443;
+  },
+
+  /**
+   * falsyな要素を配列から削除する
+   *
+   * @memberOf Barba.Utils
+   * @param  {Array} array
+   * @return {Array}
+   */
+  compact: function (array) {
+    var resIndex = 0
+    var result = []
+
+    if (array == null) {
+      return result
+    }
+
+    array.forEach(function (value) {
+      if (value) {
+        result[resIndex++] = value
+      }
+    });
+
+    return result
   }
 };
 
