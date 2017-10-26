@@ -139,7 +139,7 @@ var HistoryManager = {
     current = current.slice(this.rootHierarchy);
 
     if ( prev[0] !== current[0] ) {
-      direction = 'change';
+      direction = 'change:root';
       return direction;
     }
 
@@ -158,5 +158,7 @@ var HistoryManager = {
     return direction;
   }
 };
+
+
 
 module.exports = HistoryManager;
