@@ -247,35 +247,31 @@ var Pjax = {
       return false;
 
     //Middle click, cmd click, and ctrl click
-    if (evt.which > 1 || evt.metaKey || evt.ctrlKey || evt.shiftKey || evt.altKey)
-      return false;
+    if (evt.which > 1 || evt.metaKey || evt.ctrlKey || evt.shiftKey || evt.altKey) return false;
 
     //Ignore target with _blank target
-    if (element.target && element.target === '_blank')
-      return false;
+    if (element.target && element.target === '_blank') return false;
 
     //Check if it's the same domain
-    if (window.location.protocol !== element.protocol || window.location.hostname !== element.hostname)
-      return false;
+    if (window.location.protocol !== element.protocol || window.location.hostname !== element.hostname) return false;
 
     //Check if the port is the same
-    if (Utils.getPort() !== Utils.getPort(element.port))
-      return false;
+    if (Utils.getPort() !== Utils.getPort(element.port)) return false;
 
     //Ignore case when a hash is being tacked on the current URL
-    if (href.indexOf('#') > -1)
-      return false;
+    if (href.indexOf('#') > -1) return false;
 
     //Ignore case where there is download attribute
-    if (element.getAttribute && typeof element.getAttribute('download') === 'string')
-      return false;
+    if (element.getAttribute && typeof element.getAttribute('download') === 'string') return false;
 
     //In case you're trying to load the same page
-    if (Utils.cleanLink(href) == Utils.cleanLink(location.href))
+    if (Utils.cleanLink(href) == Utils.cleanLink(location.href)) {
+      evt.stopPropagation();
+      evt.preventDefault();
       return false;
+    }
 
-    if (element.classList.contains(this.ignoreClassLink))
-      return false;
+    if (element.classList.contains(this.ignoreClassLink)) return false;
 
     return true;
   },
