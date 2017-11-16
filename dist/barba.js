@@ -1886,7 +1886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @type {String}
 	   */
 	  headTags: [
-			'title',
+	    'title',
 	    'meta[name="keywords"]',
 	    'meta[name="description"]',
 	    'meta[property^="og"]',
@@ -1904,13 +1904,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *
 	   * @memberOf Barba.Pjax.Dom
 	   * @private
-	   * @param  {String} responseText
+	   * @param  {String} responseTexta
 	   * @return {HTMLElement}
 	   */
 	  parseResponse: function(responseText) {
 	    this.currentHTML = responseText;
 	
-	    this.updateHeadElements(responseText);
+	    var wrapper = this.updateHeadElements(responseText);
 	
 	    return this.getContainer(wrapper);
 	  },
@@ -1919,11 +1919,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * ヘッドのMetaタグ系を更新する
 	   *
 	   * @param  {String} newPageRawHTML ロードしたページの生HTML
+	   * @return {HTMLElement}
 	   */
-	  updateHeadElements: function(newPageRawHTML) {
+	  updateHeadElements: function(responseText) {
+	    var wrapper = document.createElement('div');
+	    wrapper.innerHTML = responseText;
+	
 	    var head = document.head;
-	    var newPageRawHead = newPageRawHTML.match(/<head[^>]*>([\s\S.]*)<\/head>/i)[1];
-	    var newPageHead = document.createElement('head');
+	    var newPageHead = wrapper.querySelector('head');
 	    var i, oldHeadTags, newHeadTags;
 	
 	    newPageHead.innerHTML = newPageRawHead;
@@ -1937,6 +1940,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    for (i = 0; i < newHeadTags.length; i++) {
 	      head.appendChild(newHeadTags[i]);
 	    }
+	
+			return wrapper;
 	  },
 	
 	  /**
