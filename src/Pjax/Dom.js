@@ -92,8 +92,6 @@ var Dom = {
     var newPageHead = wrapper.querySelector('head');
     var i, oldHeadTags, newHeadTags;
 
-    newPageHead.innerHTML = newPageRawHead;
-
     oldHeadTags = head.querySelectorAll(this.headTags);
     for (i = 0; i < oldHeadTags.length; i++) {
       head.removeChild(oldHeadTags[i]);
