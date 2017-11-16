@@ -86,18 +86,17 @@ var Dom = {
    */
   updateHeadElements: function(responseText) {
     var wrapper = document.createElement('div');
-    wrapper.innerHTML = responseText;
-
     var head = document.head;
-    var newPageHead = wrapper.querySelector('head');
     var i, oldHeadTags, newHeadTags;
+
+    wrapper.innerHTML = responseText;
 
     oldHeadTags = head.querySelectorAll(this.headTags);
     for (i = 0; i < oldHeadTags.length; i++) {
       head.removeChild(oldHeadTags[i]);
     }
 
-    newHeadTags = newPageHead.querySelectorAll(this.headTags);
+    newHeadTags = wrapper.querySelectorAll(this.headTags);
     for (i = 0; i < newHeadTags.length; i++) {
       head.appendChild(newHeadTags[i]);
     }
