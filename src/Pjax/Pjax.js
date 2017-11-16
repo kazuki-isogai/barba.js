@@ -19,24 +19,6 @@ var Pjax = {
   Cache: BaseCache,
 
   /**
-   * 遷移時に変更するhead内要素
-   *
-   * @type {String}
-   */
-  headTags: [
-    "meta[name='keywords']",
-    "meta[name='description']",
-    "meta[property^='og']",
-    "meta[name^='twitter']",
-    "meta[itemprop]",
-    "link[itemprop]",
-    "link[rel='prev']",
-    "link[rel='next']",
-    "link[rel='canonical']",
-    "link[rel='alternate']"
-  ].join(','),
-
-  /**
    * Indicate wether or not use the cache
    *
    * @memberOf Barba.Pjax
@@ -357,38 +339,12 @@ var Pjax = {
     var currentStatus = this.History.currentStatus();
     currentStatus.namespace = this.Dom.getNamespace(container);
 
-    if ( this.History.history.length > 1 ) this.updateHeadElements(this.Dom.currentHTML);
-
     Dispatcher.trigger('newPageReady',
       this.History.currentStatus(),
       this.History.prevStatus(),
       container,
       this.Dom.currentHTML
     );
-  },
-
-  /**
-   * ヘッドのMetaタグ系を更新する
-   *
-   * @param  {String} newPageRawHTML ロードしたページの生HTML
-   */
-  updateHeadElements: function(newPageRawHTML) {
-    var head = document.head;
-    var newPageRawHead = newPageRawHTML.match(/<head[^>]*>([\s\S.]*)<\/head>/i)[1];
-    var newPageHead = document.createElement('head');
-    var i, oldHeadTags, newHeadTags;
-
-    newPageHead.innerHTML = newPageRawHead;
-
-    oldHeadTags = head.querySelectorAll(this.headTags);
-    for (i = 0; i < oldHeadTags.length; i++) {
-      head.removeChild(oldHeadTags[i]);
-    }
-
-    newHeadTags = newPageHead.querySelectorAll(this.headTags);
-    for (i = 0; i < newHeadTags.length; i++) {
-      head.appendChild(newHeadTags[i]);
-    }
   },
 
   /**
