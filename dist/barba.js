@@ -1942,7 +1942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      head.appendChild(newHeadTags[i]);
 	    }
 	
-			oldSubElements = head.querySelectorAll(this.subClass);
+			oldSubElements = body.querySelectorAll(this.subClass);
 	    for (i = 0; i < oldSubElements.length; i++) {
 	      body.removeChild(oldSubElements[i]);
 	    }
