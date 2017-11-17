@@ -32,8 +32,6 @@ var Dom = {
    */
   containerClass: 'barba-container',
 
-	subClass: 'barba-sub-elemnt',
-
   /**
    * Full HTML String of the current page.
    * By default is the innerHTML of the initial loaded page.
@@ -75,7 +73,7 @@ var Dom = {
   parseResponse: function(responseText) {
     this.currentHTML = responseText;
 
-    var wrapper = this.updateElements(responseText);
+    var wrapper = this.updateHeadElements(responseText);
 
     return this.getContainer(wrapper);
   },
@@ -86,11 +84,9 @@ var Dom = {
    * @param  {String} newPageRawHTML ロードしたページの生HTML
    * @return {HTMLElement}
    */
-  updateElements: function(responseText) {
+  updateHeadElements: function(responseText) {
     var wrapper = document.createElement('div');
     var head = document.head;
-		var body = document.body;
-		var targetEl = document.getElementById('page');
     var i, oldHeadTags, newHeadTags;
 
     wrapper.innerHTML = responseText;
@@ -105,17 +101,7 @@ var Dom = {
       head.appendChild(newHeadTags[i]);
     }
 
-		oldSubElements = body.querySelectorAll(this.subClass);
-    for (i = 0; i < oldSubElements.length; i++) {
-      body.removeChild(oldSubElements[i]);
-    }
-
-    newSubElements = wrapper.querySelectorAll(this.subClass);
-    for (i = 0; i < newSubElements.length; i++) {
-      body.insertBefore(newSubElements[i], targetEl.nextSibling)
-    }
-
-    return wrapper;
+		return wrapper;
   },
 
   /**
