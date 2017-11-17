@@ -32,7 +32,14 @@ var Dom = {
    */
   containerClass: 'barba-container',
 
-	subClass: 'barba-sub-elemnt',
+  /**
+   * Class name used to identify the sub contents
+   *
+   * @memberOf Barba.Pjax.Dom
+   * @type {String}
+   * @default
+   */
+  subClass: 'barba-sub-elemnt',
 
   /**
    * Full HTML String of the current page.
@@ -81,7 +88,7 @@ var Dom = {
   },
 
 	/**
-   * ヘッドのMetaタグ系を更新する
+   * 指定された要素を更新する
    *
    * @param  {String} newPageRawHTML ロードしたページの生HTML
    * @return {HTMLElement}
@@ -105,12 +112,12 @@ var Dom = {
       head.appendChild(newHeadTags[i]);
     }
 
-		oldSubElements = body.querySelectorAll(this.subClass);
+		oldSubElements = body.getElementsByClassName(this.subClass);
     for (i = 0; i < oldSubElements.length; i++) {
       body.removeChild(oldSubElements[i]);
     }
 
-    newSubElements = wrapper.querySelectorAll(this.subClass);
+    newSubElements = wrapper.getElementsByClassName(this.subClass);
     for (i = 0; i < newSubElements.length; i++) {
       body.insertBefore(newSubElements[i], targetEl.nextSibling)
     }
