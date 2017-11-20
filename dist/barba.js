@@ -1482,6 +1482,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	  ignoreClassLink: 'no-barba',
 	
+		/**
+	   * Class name used to force links
+	   *
+	   * @memberOf Barba.Pjax
+	   * @type {String}
+	   * @default
+	   */
+		 forceClassLink: 'force-barba',
+	
 	  /**
 	   * Function to be called to start Pjax
 	   *
@@ -1682,6 +1691,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //User
 	    if (!element || !href)
 	      return false;
+	
+			if (element.classList.contains(this.forceClassLink)) return true;
 	
 	    //Middle click, cmd click, and ctrl click
 	    if (evt.which > 1 || evt.metaKey || evt.ctrlKey || evt.shiftKey || evt.altKey) return false;
